@@ -1,0 +1,12 @@
+[
+  {"id":"task_0001","title":"Study for Calculus exam","dueDate":"2025-09-29","duration":120,"tag":"Exam","createdAt":"2025-09-20T08:00:00.000Z","updatedAt":"2025-09-20T08:00:00.000Z"},
+  {"id":"task_0002","title":"Write biology lab report","dueDate":"2025-09-30","duration":90,"tag":"Lab","createdAt":"2025-09-21T09:00:00.000Z","updatedAt":"2025-09-21T09:00:00.000Z"},
+  {"id":"task_0003","title":"Group project meeting","dueDate":"2025-10-01","duration":60,"tag":"Group","createdAt":"2025-09-22T10:00:00.000Z","updatedAt":"2025-09-22T10:00:00.000Z"},
+  {"id":"task_0004","title":"Read history chapters 5-7","dueDate":"2025-09-28","duration":45,"tag":"Study","createdAt":"2025-09-23T11:00:00.000Z","updatedAt":"2025-09-23T11:00:00.000Z"},
+  {"id":"task_0005","title":"Submit English essay draft","dueDate":"2025-10-03","duration":180,"tag":"Assignment","createdAt":"2025-09-24T12:00:00.000Z","updatedAt":"2025-09-24T12:00:00.000Z"},
+  {"id":"task_0006","title":"Physics problem set","dueDate":"2025-10-02","duration":75,"tag":"Homework","createdAt":"2025-09-25T08:30:00.000Z","updatedAt":"2025-09-25T08:30:00.000Z"},
+  {"id":"task_0007","title":"Attend career fair","dueDate":"2025-10-05","duration":120,"tag":"Event","createdAt":"2025-09-25T09:00:00.000Z","updatedAt":"2025-09-25T09:00:00.000Z"},
+  {"id":"task_0008","title":"Practice Spanish presentation","dueDate":"2025-09-27","duration":30,"tag":"Study","createdAt":"2025-09-26T07:00:00.000Z","updatedAt":"2025-09-26T07:00:00.000Z"},
+  {"id":"task_0009","title":"Complete online quiz","dueDate":"2025-09-26","duration":20,"tag":"Quiz","createdAt":"2025-09-26T14:00:00.000Z","updatedAt":"2025-09-26T14:00:00.000Z"},
+  {"id":"task_0010","title":"Library research session","dueDate":"2025-10-04","duration":150,"tag":"Study","createdAt":"2025-09-27T10:00:00.000Z","updatedAt":"2025-09-27T10:00:00.000Z"}
+]

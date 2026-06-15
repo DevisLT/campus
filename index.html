@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Life Planner</title>
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+
+  <!-- Skip link for keyboard users -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <header>
+    <div class="header-inner">
+      <h1>Campus Life Planner</h1>
+      <nav aria-label="Main navigation">
+        <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+        <button class="nav-btn" data-section="records">Tasks</button>
+        <button class="nav-btn" data-section="add-form">Add Task</button>
+        <button class="nav-btn" data-section="settings">Settings</button>
+        <button class="nav-btn" data-section="about">About</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- DASHBOARD SECTION -->
+    <section id="dashboard" class="section active" aria-label="Dashboard">
+      <h2>Dashboard</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-number" id="total-tasks">0</span>
+          <span class="stat-label">Total Tasks</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="total-duration">0h</span>
+          <span class="stat-label">Total Duration</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="top-tag">—</span>
+          <span class="stat-label">Top Tag</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="week-count">0</span>
+          <span class="stat-label">This Week</span>
+        </div>
+      </div>
+
+      <!-- Cap / Target -->
+      <div class="cap-section">
+        <h3>Weekly Duration Target</h3>
+        <div class="cap-bar-wrap">
+          <div class="cap-bar" id="cap-bar">
+            <div class="cap-fill" id="cap-fill"></div>
+          </div>
+          <span id="cap-label">0 / 0 min</span>
+        </div>
+        <!-- ARIA live region for cap messages -->
+        <div id="cap-msg" role="status" aria-live="polite" class="cap-msg"></div>
+      </div>
+
+      <!-- Last 7 days mini chart -->
+      <div class="chart-section">
+        <h3>Last 7 Days</h3>
+        <div class="bar-chart" id="bar-chart" aria-label="Bar chart showing tasks per day"></div>
+      </div>
+    </section>
+
+    <!-- RECORDS SECTION -->
+    <section id="records" class="section" aria-label="Task records">
+      <h2>All Tasks</h2>
+
+      <!-- Search -->
+      <div class="search-row">
+        <label for="search-input">Search (regex):</label>
+        <input type="text" id="search-input" placeholder="e.g. exam|quiz or @tag:\w+" />
+        <label>
+          <input type="checkbox" id="case-toggle" /> Case sensitive
+        </label>
+        <div id="search-error" class="error-msg" role="alert" aria-live="assertive"></div>
+      </div>
+
+      <!-- Sort controls -->
+      <div class="sort-row">
+        <span>Sort by:</span>
+        <button class="sort-btn" data-sort="dueDate">Date</button>
+        <button class="sort-btn" data-sort="title">Title A↕Z</button>
+        <button class="sort-btn" data-sort="duration">Duration ↑↓</button>
+      </div>
+
+      <!-- Export / Import -->
+      <div class="io-row">
+        <button id="export-btn">Export JSON</button>
+        <label class="import-label" for="import-file">Import JSON</label>
+        <input type="file" id="import-file" accept=".json" />
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table aria-label="Task list">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Due Date</th>
+              <th>Duration</th>
+              <th>Tag</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="records-body">
+            <!-- Rows filled by JS -->
+          </tbody>
+        </table>
+      </div>
+      <p id="empty-msg" class="empty-msg">No tasks yet. Add your first one!</p>
+    </section>
+
+    <!-- ADD / EDIT FORM SECTION -->
+    <section id="add-form" class="section" aria-label="Add or edit task">
+      <h2 id="form-title">Add New Task</h2>
+
+      <!-- Status messages -->
+      <div id="form-status" role="status" aria-live="polite" class="form-status"></div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="f-title">Title *</label>
+          <input type="text" id="f-title" required />
+          <span class="field-error" id="err-title"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="f-due">Due Date * (YYYY-MM-DD)</label>
+          <input type="date" id="f-due" required />
+          <span class="field-error" id="err-due"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="f-duration">Duration (minutes) *</label>
+          <input type="number" id="f-duration" min="1" placeholder="e.g. 90" />
+          <span class="field-error" id="err-duration"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="f-tag">Tag *</label>
+          <input type="text" id="f-tag" placeholder="e.g. Study, Exam, Lab" />
+          <span class="field-error" id="err-tag"></span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button id="save-btn">Save Task</button>
+        <button id="cancel-btn" type="button">Cancel</button>
+      </div>
+
+      <input type="hidden" id="edit-id" />
+    </section>
+
+    <!-- SETTINGS SECTION -->
+    <section id="settings" class="section" aria-label="Settings">
+      <h2>Settings</h2>
+      <div class="form-group">
+        <label for="unit-select">Duration unit</label>
+        <select id="unit-select">
+          <option value="minutes">Minutes</option>
+          <option value="hours">Hours</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="weekly-cap">Weekly duration target (minutes)</label>
+        <input type="number" id="weekly-cap" min="0" placeholder="e.g. 600" />
+      </div>
+      <button id="save-settings">Save Settings</button>
+      <div id="settings-msg" role="status" aria-live="polite" class="form-status"></div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section" aria-label="About this app">
+      <h2>About</h2>
+      <p>Campus Life Planner helps students organize tasks and track study time.</p>
+      <p>Built with plain HTML, CSS, and JavaScript — no frameworks.</p>
+      <ul>
+        <li>📧 Email: <a href="d.muhozin@alustudent.com">d.muhozin@alustudent.com</a></li>
+        <li>🐙 GitHub: <a href="https://github.com/Devislastthought/Campus-Life-Planner" target="_blank" rel="noopener">https://github.com/Devislastthought/Campus-Life-Planner</a></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Campus Life Planner &copy 2026</p>
+  </footer>
+
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>

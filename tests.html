@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tests — Campus Life Planner</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 16px; }
+    h1 { color: #1a2332; }
+    .pass { color: #2d8a5e; font-weight: bold; }
+    .fail { color: #dc2626; font-weight: bold; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #d1d5db; }
+    th { background: #1a2332; color: white; }
+    #summary { margin-top: 20px; font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+  <h1>🧪 Validator Tests</h1>
+  <table>
+    <thead>
+      <tr><th>Test</th><th>Input</th><th>Expected</th><th>Result</th></tr>
+    </thead>
+    <tbody id="results"></tbody>
+  </table>
+  <div id="summary"></div>
+
+<script type="module">
+import {
+  validateTitle,
+  validateDuration,
+  validateDate,
+  validateTag,
+  compileRegex
+} from './scripts/validators.js';
+
+// Each test: [label, function, input, expectedResult ('' means no error, anything else means error expected)]
+const tests = [
+  // Title tests
+  ['Title: valid',             validateTitle, 'Study for exam',     ''],
+  ['Title: leading space',     validateTitle, ' Exam review',       'Title cannot start or end with spaces.'],
+  ['Title: trailing space',    validateTitle, 'Exam review ',       'Title cannot start or end with spaces.'],
+  ['Title: empty string',      validateTitle, '',                   'Title is required.'],
+  ['Title: duplicate word',    validateTitle, 'the the exam',       'Title has a repeated word (e.g. "the the").'],
+
+  // Duration tests
+  ['Duration: valid',          validateDuration, '90',   ''],
+  ['Duration: zero',           validateDuration, '0',    'Duration must be a whole number greater than 0.'],
+  ['Duration: decimal',        validateDuration, '1.5',  'Duration must be a whole number greater than 0.'],
+  ['Duration: empty',          validateDuration, '',     'Duration is required.'],
+  ['Duration: text',           validateDuration, 'abc',  'Duration must be a whole number greater than 0.'],
+
+  // Date tests
+  ['Date: valid',              validateDate, '2025-09-29',   ''],
+  ['Date: wrong format',       validateDate, '29-09-2025',   'Date must be in YYYY-MM-DD format.'],
+  ['Date: bad month',          validateDate, '2025-13-01',   'Date must be in YYYY-MM-DD format.'],
+  ['Date: empty',              validateDate, '',             'Date is required.'],
+
+  // Tag tests
+  ['Tag: valid single',        validateTag, 'Study',         ''],
+  ['Tag: valid with space',    validateTag, 'Group Work',    ''],
+  ['Tag: valid with hyphen',   validateTag, 'Lab-Work',      ''],
+  ['Tag: has number',          validateTag, 'Week1',         'Tag can only have letters, spaces, or hyphens.'],
+  ['Tag: empty',               validateTag, '',              'Tag is required.'],
+
+  // Regex compiler tests
+  ['Regex: valid pattern',     (v) => compileRegex(v) !== null ? '' : 'invalid', 'exam|quiz',  ''],
+  ['Regex: bad pattern',       (v) => compileRegex(v) === null ? '' : 'did not fail', '[unclosed',  ''],
+];
+
+let passed = 0, failed = 0;
+const tbody = document.getElementById('results');
+
+tests.forEach(([label, fn, input, expected]) => {
+  const result = fn(input);
+  // For regex tests: we check if the returned string is '' (success) or not
+  const ok = result === expected;
+  if (ok) passed++; else failed++;
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${label}</td>
+    <td><code>${input || '(empty)'}</code></td>
+    <td><code>${expected || '(no error)'}</code></td>
+    <td class="${ok ? 'pass' : 'fail'}">${ok ? '✅ Pass' : '❌ Fail — got: ' + result}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+document.getElementById('summary').innerHTML =
+  `<strong>Results: <span style="color:#2d8a5e">${passed} passed</span> / <span style="color:#dc2626">${failed} failed</span> out of ${tests.length} tests</strong>`;
+</script>
+</body>
+</html>
